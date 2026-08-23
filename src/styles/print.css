@@ -1,0 +1,68 @@
+/* Composición de impresión: hojas A4 verticales con tickets a tamaño físico real, sin escala. */
+
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+    background: #fff;
+  }
+
+  /* Neutraliza el layout de pantalla para que la hoja A4 ocupe la página exacta */
+  #app,
+  .app-shell {
+    width: 210mm !important;
+    max-width: none !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  .screen-only {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .print-sheet {
+    width: 210mm;
+    min-height: 297mm;
+    box-sizing: border-box;
+    padding: var(--print-margin);
+    display: grid;
+    grid-template-columns: repeat(var(--print-columns), var(--ticket-width));
+    grid-auto-rows: var(--ticket-height);
+    gap: var(--print-gap);
+    align-content: start;
+    justify-content: start;
+    break-after: page;
+    page-break-after: always;
+    background: #fff;
+  }
+
+  .print-sheet:last-child {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  .ticket {
+    width: var(--ticket-width);
+    height: var(--ticket-height);
+    box-sizing: border-box;
+    break-inside: avoid;
+    page-break-inside: avoid;
+    overflow: hidden;
+    background: #fff;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

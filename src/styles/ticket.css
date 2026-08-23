@@ -1,0 +1,363 @@
+/* Ticket térmico simulado: dimensiones físicas reales en mm.
+   Las variables --ticket-* y de apariencia se inyectan desde App.vue según la configuración. */
+
+/* Fuente local opcional. Si el archivo no existe, se usa el fallback sin bloquear. */
+@font-face {
+  font-family: 'Ticket Mono';
+  src:
+    url('/fonts/TicketMono.woff2') format('woff2'),
+    url('/fonts/TicketMono.ttf') format('truetype');
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.ticket {
+  width: var(--ticket-width, 79mm);
+  height: var(--ticket-height, 183mm);
+  box-sizing: border-box;
+  padding:
+    var(--ticket-padding-top, 30mm)
+    var(--ticket-padding-right, 12mm)
+    var(--ticket-padding-bottom, 21mm)
+    var(--ticket-padding-left, 5mm);
+  overflow: hidden;
+  position: relative;
+  background: #fff;
+  font-family: var(
+    --ticket-font-family,
+    'Ticket Mono',
+    'Courier New',
+    Courier,
+    ui-monospace,
+    'Liberation Mono',
+    monospace
+  );
+  font-size: var(--ticket-font-size, 5.2pt);
+  font-weight: var(--ticket-font-weight, 400);
+  line-height: var(--ticket-line-height, 1.14);
+  font-variant-numeric: tabular-nums;
+  color: rgba(0, 0, 0, var(--ink-intensity, 0.82));
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+/* Textura térmica muy leve, solo CSS. Queda sobre el texto, pero NUNCA sobre el QR. */
+.ticket::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: var(--texture-intensity, 0.035);
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(0, 0, 0, 0.5) 0,
+      rgba(0, 0, 0, 0.5) 0.3mm,
+      transparent 0.3mm,
+      transparent 1.1mm
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.35) 0,
+      rgba(0, 0, 0, 0.35) 0.4mm,
+      transparent 0.4mm,
+      transparent 2.4mm
+    );
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+}
+
+.ticket-body {
+  position: relative;
+  z-index: 1;
+}
+
+/* Encabezado centrado y compacto */
+.ticket-header {
+  margin-bottom: 4mm;
+}
+
+.ticket-empresa {
+  margin: 0;
+  margin-bottom: 1mm;
+}
+
+.ticket-empresa-line-2 {
+  margin: 0 0 5mm 6mm;
+}
+
+.ticket-header-line {
+  margin: 0;
+  margin-left: 5.5mm;
+  margin-bottom: 1mm;
+}
+
+.ticket-header-line-2 {
+  margin-left: 8.5mm;
+}
+
+.ticket-encabezado {
+  font-size: var(--ticket-heading-size, 5.2pt);
+  font-weight: 400;
+  margin: 3mm 0 5mm 14mm;
+}
+
+.ticket-subtitulo {
+  font-size: var(--ticket-heading-size, 5.2pt);
+  margin: 0 0 0 18mm;
+}
+
+/* Metadatos */
+.ticket-meta {
+  margin: 0 0 0.6mm;
+}
+
+.ticket-meta-row {
+  display: flex;
+  align-items: baseline;
+  padding: 1mm 0 0 0;
+}
+
+.ticket-meta-row.group-1 .ticket-meta-label {
+  min-width: 11mm;
+}
+
+.ticket-meta-row.group-1-end {
+  margin-bottom: 3mm;
+}
+
+.ticket-meta-row.group-2 .ticket-meta-label {
+  min-width: 8.7mm;
+}
+
+.ticket-meta-row.meta-8 {
+  white-space: nowrap;
+}
+
+.ticket-meta-row.meta-penultimate {
+  margin-bottom: 1mm;
+}
+
+.ticket-meta-row.meta-last {
+  display: block;
+  position: relative;
+  padding-top: 0;
+}
+
+.ticket-meta-row.meta-last .ticket-meta-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.ticket-meta-row.meta-last .ticket-meta-value {
+  display: block;
+  padding-left: 0;
+  text-indent: 10mm;
+  white-space: normal;
+}
+
+.ticket-meta-label {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.ticket-meta-value {
+  margin: 0;
+  padding-left: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Separadores con caracteres = (se recortan al ancho útil) */
+.ticket-separator {
+  white-space: nowrap;
+  overflow: hidden;
+  line-height: 1;
+  margin: 0.7mm 0;
+  user-select: none;
+}
+
+/* Tabla de detalle */
+.ticket-detail {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.ticket-detail .col-cant {
+  width: 8mm;
+}
+
+.ticket-detail .col-desc {
+  width: auto;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+.ticket-detail tbody .col-desc {
+  white-space: nowrap;
+}
+
+.ticket-detail .col-punit {
+  width: 18mm;
+}
+
+.ticket-detail thead .col-punit {
+  padding-left: 5mm;
+}
+
+.ticket-detail thead .col-costo {
+  padding-left: 0;
+}
+
+.ticket-detail .col-costo {
+  width: 16mm;
+}
+
+.ticket-detail th,
+.ticket-detail td {
+  font-weight: inherit;
+  text-align: left;
+  padding: 0.2mm 0.6mm 0.2mm 0;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.ticket-detail-separator-row td {
+  padding: 0;
+}
+
+.ticket-detail-separator-row th {
+  padding: 0;
+}
+
+.ticket-detail-separator-row .ticket-separator {
+  margin: 0.6mm 0 0.7mm;
+}
+
+.ticket-detail th:last-child,
+.ticket-detail td:last-child {
+  padding-right: 0;
+}
+
+.ticket-detail .col-desc {
+  padding-left: 4mm;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.ticket-detail .col-punit {
+  padding-left: 10mm;
+  text-align: left;
+}
+
+.ticket-detail .col-costo {
+  padding-left: 6.5mm;
+  text-align: left;
+}
+
+/* Subtotal en bloque con desplazamientos controlados */
+.ticket-subtotal {
+  display: block;
+  margin: 0.2mm 0;
+  margin-left: 25mm;
+}
+
+.ticket-subtotal-value {
+  display: inline-block;
+  margin-left: 8mm;
+}
+
+/* Bloque inferior: responsable/cargo/original con el QR compartiendo la banda vertical.
+   padding-right reserva el espacio del QR para que el texto nunca quede debajo. */
+.ticket-bottom {
+  position: relative;
+  margin-top: 0.8mm;
+  min-height: var(--qr-size, 24mm);
+  padding-right: calc(var(--qr-size, 24mm) + 2mm);
+}
+
+.ticket-responsable {
+  display: flex;
+  align-items: baseline;
+  margin: 0;
+}
+
+.ticket-responsable .ticket-meta-label {
+  min-width: 12mm;
+  margin-bottom: 1mm;
+}
+
+.ticket-responsable .ticket-meta-value {
+  padding-left: 0;
+}
+
+.ticket-original {
+  margin-top: 4mm;
+  text-align: center;
+}
+
+/* El QR queda por encima de la textura, nítido y con fondo blanco (zona silenciosa). */
+.ticket-qr {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  background: #fff;
+  transform: translateY(3mm);
+}
+
+.qr-code {
+  background: #fff;
+}
+
+.qr-code-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  filter: none;
+  image-rendering: pixelated;
+}
+
+.qr-code-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed #a41e22;
+  color: #a41e22;
+  font-size: 5.2pt;
+  text-align: center;
+}
+
+/* Marca de agua: zona reservada dentro del padding inferior, sin cubrir contenido ni QR */
+.watermark-area {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: var(--ticket-padding-bottom, 21mm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.watermark-img {
+  max-width: 82%;
+  max-height: 92%;
+  object-fit: contain;
+}
+
+/* Placeholder discreto: solo en la interfaz de edición (screen-only), nunca se imprime */
+.watermark-placeholder {
+  max-width: 70%;
+  max-height: 80%;
+  opacity: 0.28;
+}
