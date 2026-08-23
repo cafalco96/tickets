@@ -249,7 +249,7 @@
 }
 
 .ticket-detail .col-punit {
-  padding-left: 10mm;
+  padding-left: 11mm;
   text-align: left;
 }
 
@@ -367,14 +367,17 @@
 }
 
 .watermark-img {
-  max-width: 82%;
-  max-height: 92%;
+  width: 45mm;
+  height: 12mm;
   object-fit: contain;
+  object-position: center;
 }
 
 /* Placeholder discreto: solo en la interfaz de edición (screen-only), nunca se imprime */
 .watermark-placeholder {
-  max-width: 70%;
-  max-height: 80%;
+  width: 45mm;
+  height: 12mm;
+  object-fit: contain;
+  object-position: center;
   opacity: 0.28;
 }

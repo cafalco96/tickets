@@ -104,14 +104,18 @@ function restablecer() {
       <summary>Marca de agua</summary>
       <div class="settings-grid">
         <div class="field">
-          <label for="s-watermark-url">URL de la imagen de marca de agua</label>
+          <label for="s-watermark-url">Imagen de marca de agua (ruta en <code>public/</code> o URL externa)</label>
           <input
             id="s-watermark-url"
             v-model="settings.watermarkUrl"
             type="text"
-            placeholder="/mi-marca-de-agua.png"
+            placeholder="/marca-de-agua.png o https://..."
           />
-          <p class="field-hint">Vacío = sin marca de agua. La imagen debe estar en <code>public/</code>.</p>
+          <p class="field-hint">
+            Vacío = sin marca de agua. Acepta una ruta relativa a <code>public/</code>
+            (ej. <code>/marca-de-agua.png</code>) o una URL completa externa
+            (ej. <code>https://ejemplo.com/marca.png</code>).
+          </p>
         </div>
         <div class="field">
           <label for="s-watermark-opacity">Opacidad (0 a 1)</label>

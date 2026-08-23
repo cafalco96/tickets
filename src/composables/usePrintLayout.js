@@ -10,8 +10,11 @@ export const A4_WIDTH_MM = 210
 export const A4_HEIGHT_MM = 297
 
 export function usePrintLayout() {
-  const usableWidth = computed(() => A4_WIDTH_MM - 2 * Number(settings.printMarginMm || 0))
-  const usableHeight = computed(() => A4_HEIGHT_MM - 2 * Number(settings.printMarginMm || 0))
+  // Los tickets inician pegados al borde superior e izquierdo de la hoja (sin
+  // margen en esos lados) para facilitar el corte; el margen solo se aplica a la
+  // derecha e inferior, donde el sello de la impresora lo requiere.
+  const usableWidth = computed(() => A4_WIDTH_MM - Number(settings.printMarginMm || 0))
+  const usableHeight = computed(() => A4_HEIGHT_MM - Number(settings.printMarginMm || 0))
 
   const columns = computed(() =>
     Math.max(
@@ -63,16 +66,16 @@ export function usePrintLayout() {
     const margin = Number(settings.printMarginMm || 0)
     if (!(w > 0)) errors.push('El ancho del ticket debe ser mayor que 0 mm.')
     if (!(h > 0)) errors.push('El alto del ticket debe ser mayor que 0 mm.')
-    if (w > usableWidth.value) {
-      errors.push(
-        `El ancho del ticket (${w} mm) supera el ancho útil de la hoja A4 (${usableWidth.value} mm). Reduce el ancho del ticket o el margen de impresión (actual: ${margin} mm por lado).`,
-      )
-    }
-    if (h > usableHeight.value) {
-      errors.push(
-        `El alto del ticket (${h} mm) supera el alto útil de la hoja A4 (${usableHeight.value} mm). Reduce el alto del ticket o el margen de impresión (actual: ${margin} mm por lado).`,
-      )
-    }
+      if (w > usableWidth.value) {
+        errors.push(
+          `El ancho del ticket (${w} mm) supera el ancho útil de la hoja A4 (${usableWidth.value} mm). Reduce el ancho del ticket o el margen de impresión (actual: ${margin} mm en el lado derecho).`,
+        )
+      }
+      if (h > usableHeight.value) {
+        errors.push(
+          `El alto del ticket (${h} mm) supera el alto útil de la hoja A4 (${usableHeight.value} mm). Reduce el alto del ticket o el margen de impresión (actual: ${margin} mm en la parte inferior).`,
+        )
+      }
     return errors
   })
 

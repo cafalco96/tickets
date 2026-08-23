@@ -37,7 +37,7 @@
     width: 210mm;
     min-height: 297mm;
     box-sizing: border-box;
-    padding: var(--print-margin);
+    padding: 0 var(--print-margin) var(--print-margin) 0;
     display: grid;
     grid-template-columns: repeat(var(--print-columns), var(--ticket-width));
     grid-auto-rows: var(--ticket-height);
