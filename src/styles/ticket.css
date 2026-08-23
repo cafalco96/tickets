@@ -371,6 +371,12 @@
   height: 12mm;
   object-fit: contain;
   object-position: center;
+  -webkit-mask-image: radial-gradient(circle at center, #000 0, #000 1px, transparent 1.6px);
+  mask-image: radial-gradient(circle at center, #000 0, #000 1px, transparent 1.6px);
+  -webkit-mask-size: 3px 3px;
+  mask-size: 3px 3px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
 }
 
 /* Placeholder discreto: solo en la interfaz de edición (screen-only), nunca se imprime */
@@ -380,4 +386,10 @@
   object-fit: contain;
   object-position: center;
   opacity: 0.28;
+  -webkit-mask-image: radial-gradient(circle at center, #000 0, #000 1px, transparent 1.6px);
+  mask-image: radial-gradient(circle at center, #000 0, #000 1px, transparent 1.6px);
+  -webkit-mask-size: 3px 3px;
+  mask-size: 3px 3px;
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
 }
