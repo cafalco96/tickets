@@ -28,6 +28,7 @@ const ticketOverflow = ref(false)
 const qrError = ref('')
 const fontError = ref('')
 const configAbierta = ref(false)
+const bundledTicketFonts = new Set(['Spleen Receipt 12x24', 'Thermal Sans Mono'])
 const pdfNoticeClass = computed(() => {
   if (pdfFeedbackType.value === 'success') return 'notice-success'
   if (pdfFeedbackType.value === 'error') return 'notice-error'
@@ -51,7 +52,7 @@ const cssVars = computed(() => ({
   '--texture-intensity': settings.simularTexturaTermica
     ? String(settings.intensidadTexturaTermica)
     : '0',
-  '--ticket-font-family': `"${settings.baseFontFamily}", "Spleen Receipt 12x24", "Lucida Console", "Courier New", Courier, ui-monospace, "Liberation Mono", monospace`,
+  '--ticket-font-family': `"${settings.baseFontFamily}", "Spleen Receipt 12x24", "Thermal Sans Mono", "Lucida Console", "Courier New", Courier, ui-monospace, "Liberation Mono", monospace`,
   '--ticket-font-size': `${settings.baseFontSizePt}pt`,
   '--ticket-heading-size': `${settings.headingFontSizePt}pt`,
   '--ticket-line-height': String(settings.lineHeight),
@@ -93,7 +94,7 @@ async function cargarFuenteDelTicket() {
   try {
     const loadedFaces = await document.fonts.load(fontSpec, sample)
     await document.fonts.ready
-    if (settings.baseFontFamily === 'Spleen Receipt 12x24' && loadedFaces.length === 0) {
+    if (bundledTicketFonts.has(settings.baseFontFamily) && loadedFaces.length === 0) {
       return false
     }
     return document.fonts.check(fontSpec, sample)

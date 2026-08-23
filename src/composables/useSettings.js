@@ -18,7 +18,6 @@ function loadSettings() {
     const storedTypographyVersion = Number(parsed.typographyVersion || 1)
     const shouldMigrateLegacyFont =
       !('baseFontFamily' in parsed) ||
-      parsed.baseFontFamily === 'Thermal Sans Mono' ||
       parsed.baseFontFamily === 'Spleen 12x24' ||
       (storedTypographyVersion < 2 && parsed.baseFontFamily === 'Courier New')
     // Solo se aceptan claves conocidas para evitar inyectar basura en el estado.

@@ -109,9 +109,9 @@ La marca de agua se dibuja dentro del padding inferior de cada ticket, sin cubri
 
 ## Fuente térmica 12×24
 
-El ticket usa por defecto **Spleen Receipt 12×24**, una variante bitmap monoespaciada cuyas dimensiones corresponden a la cuadrícula habitual de ESC/POS Font A. El dígito `0` fue redibujado sin barra para aproximarse al original; el resto de los glifos conserva el diseño de Spleen. Los archivos web se sirven localmente desde `public/fonts/`; no dependen de una CDN.
+El ticket usa por defecto **Spleen Receipt 12×24**, una variante bitmap monoespaciada cuyas dimensiones corresponden a la cuadrícula habitual de ESC/POS Font A. El dígito `0` fue redibujado sin barra para aproximarse al original; el resto de los glifos conserva el diseño de Spleen. Como alternativa puede seleccionarse **Thermal Sans Mono 12×24** desde **Configuración → Apariencia térmica y tipografía → Fuente base**. Los archivos web se sirven localmente desde `public/fonts/`; no dependen de una CDN.
 
-La fuente base proviene de [`fcambus/spleen`](https://github.com/fcambus/spleen), versión 2.2.0, y se distribuye bajo licencia BSD de 2 cláusulas. La procedencia, modificación, hash del paquete original y licencia completa están documentados junto a los archivos de fuente.
+Spleen Receipt proviene de [`fcambus/spleen`](https://github.com/fcambus/spleen), versión 2.2.0, y se distribuye bajo licencia BSD de 2 cláusulas. Thermal Sans Mono proviene de [`mike42/thermal-sans-mono`](https://github.com/mike42/thermal-sans-mono), versión 0.2, y se distribuye bajo GPLv2+ con la GNU Font Embedding Exception. La procedencia, transformaciones, hashes y licencias están documentados junto a los archivos de fuente.
 
 Antes de imprimir, la aplicación espera la carga de la fuente seleccionada. Si la fuente térmica no está disponible, bloquea la impresión para evitar que el PDF se genere silenciosamente con `Courier New`.
 
@@ -126,7 +126,7 @@ src/
   App.vue
   main.js
 public/
-  fonts/                  Spleen Receipt 12×24, licencia y procedencia
+  fonts/                  fuentes 12×24, licencias y procedencia
   watermark-placeholder.svg
 netlify.toml
 ```

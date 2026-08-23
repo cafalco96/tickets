@@ -13,6 +13,17 @@
   font-display: block;
 }
 
+/* Alternativa bitmap 12x24 derivada de GNU Unifont para impresoras térmicas. */
+@font-face {
+  font-family: 'Thermal Sans Mono';
+  src:
+    url('/fonts/ThermalSansMono-12x24.woff2') format('woff2'),
+    url('/fonts/ThermalSansMono-12x24.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+}
+
 .ticket {
   width: var(--ticket-width, 79mm);
   height: var(--ticket-height, 183mm);
@@ -28,6 +39,7 @@
   font-family: var(
     --ticket-font-family,
     'Spleen Receipt 12x24',
+    'Thermal Sans Mono',
     'Lucida Console',
     'Courier New',
     Courier,
