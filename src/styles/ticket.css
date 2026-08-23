@@ -334,6 +334,23 @@
   text-align: center;
 }
 
+/* Marca de agua: capa a pantalla completa; cada imagen se posiciona con top
+   (desde el borde superior del ticket) y se centra horizontalmente. */
+.watermark-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.watermark-img,
+.watermark-placeholder {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 /* Marca de agua: zona reservada dentro del padding inferior, sin cubrir contenido ni QR */
 .watermark-area {
   position: absolute;
