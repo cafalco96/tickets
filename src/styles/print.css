@@ -65,4 +65,10 @@
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+
+  /* Sin textura térmica en la impresión: el ticket sale en blanco limpio,
+     sin las líneas/cuadrícula de la textura. */
+  .ticket::after {
+    display: none !important;
+  }
 }
