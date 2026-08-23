@@ -38,7 +38,8 @@ export const DEFAULT_SETTINGS = {
   printMarginMm: 8,
   printGapMm: 4,
 
-  baseFontFamily: 'Courier New',
+  typographyVersion: 4,
+  baseFontFamily: 'Spleen Receipt 12x24',
   baseFontSizePt: 5.2,
   headingFontSizePt: 5.2,
   lineHeight: 1.14,

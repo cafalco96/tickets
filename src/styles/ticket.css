@@ -1,15 +1,16 @@
 /* Ticket térmico simulado: dimensiones físicas reales en mm.
    Las variables --ticket-* y de apariencia se inyectan desde App.vue según la configuración. */
 
-/* Fuente local opcional. Si el archivo no existe, se usa el fallback sin bloquear. */
+/* Aproximación web de la fuente residente ESC/POS Font A (matriz 12x24).
+   Variante de Spleen con cero sin barra; licencia BSD de 2 cláusulas. */
 @font-face {
-  font-family: 'Ticket Mono';
+  font-family: 'Spleen Receipt 12x24';
   src:
-    url('/fonts/TicketMono.woff2') format('woff2'),
-    url('/fonts/TicketMono.ttf') format('truetype');
-  font-weight: 400 700;
+    url('/fonts/SpleenReceipt-12x24.woff2') format('woff2'),
+    url('/fonts/SpleenReceipt-12x24.ttf') format('truetype');
+  font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
 
 .ticket {
@@ -26,7 +27,8 @@
   background: #fff;
   font-family: var(
     --ticket-font-family,
-    'Ticket Mono',
+    'Spleen Receipt 12x24',
+    'Lucida Console',
     'Courier New',
     Courier,
     ui-monospace,
@@ -37,6 +39,9 @@
   font-weight: var(--ticket-font-weight, 400);
   line-height: var(--ticket-line-height, 1.14);
   font-variant-numeric: tabular-nums;
+  font-variant-ligatures: none;
+  font-kerning: none;
+  font-synthesis: none;
   color: rgba(0, 0, 0, var(--ink-intensity, 0.82));
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
