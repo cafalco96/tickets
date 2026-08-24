@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.pnpm-store/
 .DS_Store
 dist
 dist-ssr
@@ -34,6 +35,9 @@ coverage
 
 # Vitest
 __screenshots__/
+
+# Documentación local de análisis y planificación
+/docs/
 
 # Vite
 *.timestamp-*-*.mjs

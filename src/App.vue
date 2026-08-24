@@ -26,7 +26,9 @@ const layout = usePrintLayout()
 
 const ticketOverflow = ref(false)
 const qrError = ref('')
+const fontError = ref('')
 const configAbierta = ref(false)
+const bundledTicketFonts = new Set(['Spleen Receipt 12x24', 'Thermal Sans Mono'])
 const pdfNoticeClass = computed(() => {
   if (pdfFeedbackType.value === 'success') return 'notice-success'
   if (pdfFeedbackType.value === 'error') return 'notice-error'
@@ -50,7 +52,7 @@ const cssVars = computed(() => ({
   '--texture-intensity': settings.simularTexturaTermica
     ? String(settings.intensidadTexturaTermica)
     : '0',
-  '--ticket-font-family': `"${settings.baseFontFamily}", "Ticket Mono", "Courier New", Courier, ui-monospace, "Liberation Mono", monospace`,
+  '--ticket-font-family': `"${settings.baseFontFamily}", "Spleen Receipt 12x24", "Thermal Sans Mono", "Lucida Console", "Courier New", Courier, ui-monospace, "Liberation Mono", monospace`,
   '--ticket-font-size': `${settings.baseFontSizePt}pt`,
   '--ticket-heading-size': `${settings.headingFontSizePt}pt`,
   '--ticket-line-height': String(settings.lineHeight),
@@ -83,8 +85,33 @@ const previewFrameStyle = computed(() => ({
 }))
 
 // --- Impresión ---
-function imprimir() {
+async function cargarFuenteDelTicket() {
+  if (!document.fonts) return true
+
+  const fontSpec = `400 ${settings.baseFontSizePt}pt "${settings.baseFontFamily}"`
+  const sample = 'Empresa Pública Gestión Sólidos Resolución Emisión Número ñ 0123456789'
+
+  try {
+    const loadedFaces = await document.fonts.load(fontSpec, sample)
+    await document.fonts.ready
+    if (bundledTicketFonts.has(settings.baseFontFamily) && loadedFaces.length === 0) {
+      return false
+    }
+    return document.fonts.check(fontSpec, sample)
+  } catch (error) {
+    console.error('[ticket-generator] No se pudo cargar la fuente del ticket.', error)
+    return false
+  }
+}
+
+async function imprimir() {
   if (!layout.fitsOnA4.value) return
+  fontError.value = ''
+  if (!(await cargarFuenteDelTicket())) {
+    fontError.value =
+      'No se pudo cargar la fuente térmica del ticket. Se bloqueó la impresión para evitar un PDF con una fuente de respaldo.'
+    return
+  }
   if (!pdfTickets.value.length && settings.incrementarAl === 'imprimir') {
     // El navegador no confirma de forma fiable que la impresión terminó:
     // esto solo registra la intención de imprimir, no una emisión.
@@ -175,6 +202,7 @@ onBeforeUnmount(() => {
         reduzca texto, aumente las medidas o ajuste paddings y tipografía desde la configuración.
       </p>
       <p v-if="qrError" class="notice notice-error" role="alert">QR: {{ qrError }}</p>
+      <p v-if="fontError" class="notice notice-error" role="alert">{{ fontError }}</p>
     </div>
 
     <section class="info-card screen-only" aria-label="Información de impresión y correlativo">

@@ -15,12 +15,21 @@ function loadSettings() {
     if (!raw) return
     const parsed = JSON.parse(raw)
     if (!isPlainObject(parsed)) return
+    const storedTypographyVersion = Number(parsed.typographyVersion || 1)
+    const shouldMigrateLegacyFont =
+      !('baseFontFamily' in parsed) ||
+      parsed.baseFontFamily === 'Spleen 12x24' ||
+      (storedTypographyVersion < 2 && parsed.baseFontFamily === 'Courier New')
     // Solo se aceptan claves conocidas para evitar inyectar basura en el estado.
     for (const key of Object.keys(DEFAULT_SETTINGS)) {
       if (key in parsed && typeof parsed[key] === typeof DEFAULT_SETTINGS[key]) {
         settings[key] = parsed[key]
       }
     }
+    if (shouldMigrateLegacyFont) {
+      settings.baseFontFamily = DEFAULT_SETTINGS.baseFontFamily
+    }
+    settings.typographyVersion = DEFAULT_SETTINGS.typographyVersion
     if ('matriz' in parsed && typeof parsed.matriz === 'string' && !('matriz1' in parsed)) {
       const [firstLine, ...rest] = parsed.matriz.split('\n')
       settings.matriz1 = firstLine || DEFAULT_SETTINGS.matriz1

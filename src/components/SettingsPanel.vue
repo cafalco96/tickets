@@ -163,8 +163,9 @@ function restablecer() {
         <div class="field">
           <label for="s-font-family">Fuente base</label>
           <select id="s-font-family" v-model="settings.baseFontFamily">
+            <option value="Spleen Receipt 12x24">Spleen Receipt 12×24 (cero abierto)</option>
+            <option value="Thermal Sans Mono">Thermal Sans Mono 12×24</option>
             <option value="Courier New">Courier New</option>
-            <option value="Ticket Mono">Ticket Mono (local opcional)</option>
             <option value="Liberation Mono">Liberation Mono</option>
             <option value="ui-monospace">ui-monospace</option>
           </select>
