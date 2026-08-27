@@ -310,7 +310,7 @@ onBeforeUnmount(() => {
     <template v-else>
       <div class="viewer">
         <div class="viewer-ticket">
-          <TicketPreview />
+          <TicketPreview :viewer="true" />
         </div>
       </div>
     </template>

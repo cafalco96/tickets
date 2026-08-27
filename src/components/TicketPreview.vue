@@ -8,6 +8,8 @@ import QrCode from './QrCode.vue'
 const props = defineProps({
   // true cuando se renderiza dentro de la hoja de impresión A4.
   forPrint: { type: Boolean, default: false },
+  // true en la vista del escaneo (visor): oculta la marca de agua fantasma.
+  viewer: { type: Boolean, default: false },
   ticketData: { type: Object, default: null },
 })
 
@@ -212,7 +214,7 @@ watch([ticket, settings], checkOverflow, { deep: true })
           draggable="false"
         />
       </template>
-      <template v-else-if="!forPrint">
+      <template v-else-if="!forPrint && !viewer">
         <img
           v-for="(pos, index) in watermarkPositions"
           :key="index"

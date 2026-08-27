@@ -16,7 +16,7 @@ export const DEFAULT_SETTINGS = {
   responsable: 'ESTEBAN TEJADA',
   cargo: 'Recaudador',
 
-  qrSizeMm: 15,
+  qrSizeMm: 17,
 
   watermarkUrl: '',
   watermarkOpacity: 0.16,
