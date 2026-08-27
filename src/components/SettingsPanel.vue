@@ -90,12 +90,12 @@ function restablecer() {
       <summary>Código QR</summary>
       <div class="settings-grid">
         <div class="field">
-          <label for="s-url-qr">URL codificada en el QR</label>
-          <input id="s-url-qr" v-model="settings.urlQr" type="url" />
-        </div>
-        <div class="field">
           <label for="s-qr-size">Tamaño del QR (mm)</label>
           <input id="s-qr-size" v-model.number="settings.qrSizeMm" type="number" min="10" max="60" step="1" />
+          <p class="field-hint">
+            El QR apunta siempre a esta misma aplicación y reconstruye el ticket al escanearlo
+            (formato <code>?ticket=…</code>). No requiere configuración de URL.
+          </p>
         </div>
       </div>
     </details>

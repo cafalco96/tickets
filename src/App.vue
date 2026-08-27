@@ -1,9 +1,10 @@
 <script setup>
-import { computed, onMounted, onBeforeUnmount, ref } from 'vue'
+import { computed, onMounted, onBeforeUnmount, ref, watch } from 'vue'
 import { useSettings } from '@/composables/useSettings.js'
 import { useTicket } from '@/composables/useTicket.js'
 import { useTicketSequence } from '@/composables/useTicketSequence.js'
 import { usePrintLayout } from '@/composables/usePrintLayout.js'
+import { buildQrValue, readTicketParam } from '@/composables/useTicketQr.js'
 import TicketForm from '@/components/TicketForm.vue'
 import TicketPreview from '@/components/TicketPreview.vue'
 import SettingsPanel from '@/components/SettingsPanel.vue'
@@ -28,12 +29,26 @@ const ticketOverflow = ref(false)
 const qrError = ref('')
 const fontError = ref('')
 const configAbierta = ref(false)
+const viewerMode = ref(false)
 const bundledTicketFonts = new Set(['Spleen Receipt 12x24', 'Thermal Sans Mono'])
+
+// Marca el body en modo visor para poder quitar el fondo gris solo en el
+// resultado del escaneo (no afecta al editor).
+watch(
+  viewerMode,
+  (active) => {
+    document.body.classList.toggle('viewer-mode', active)
+  },
+  { immediate: true },
+)
 const pdfNoticeClass = computed(() => {
   if (pdfFeedbackType.value === 'success') return 'notice-success'
   if (pdfFeedbackType.value === 'error') return 'notice-error'
   return 'notice-info'
 })
+
+// Valor del QR del ticket en edición (se muestra como referencia en pantalla).
+const liveQrValue = computed(() => buildQrValue(ticket))
 
 // --- Variables CSS físicas inyectadas según la configuración ---
 const cssVars = computed(() => ({
@@ -125,6 +140,13 @@ function onOverflow(value) {
 }
 
 onMounted(() => {
+  // Modo visor: si la URL trae ?ticket=, reconstruye ese ticket y oculta el editor.
+  const decoded = readTicketParam()
+  if (decoded) {
+    Object.assign(ticket, decoded)
+    viewerMode.value = true
+    return
+  }
   if (!String(ticket.numeroTicket).trim()) {
     nuevoTicket()
   }
@@ -146,6 +168,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="app-shell" :style="cssVars">
+    <template v-if="!viewerMode">
     <header class="app-header screen-only">
       <div>
         <h1>Generador de Tickets</h1>
@@ -278,11 +301,20 @@ onBeforeUnmount(() => {
           impresión siempre usa el tamaño real configurado.
         </p>
         <p class="preview-note preview-qr-value">
-          Valor exacto codificado en el QR: <strong>{{ settings.urlQr }}</strong>
+          Valor exacto codificado en el QR: <strong>{{ liveQrValue }}</strong>
         </p>
       </section>
     </main>
+    </template>
 
-    <PrintSheet />
+    <template v-else>
+      <div class="viewer">
+        <div class="viewer-ticket">
+          <TicketPreview />
+        </div>
+      </div>
+    </template>
+
+    <PrintSheet v-if="!viewerMode" />
   </div>
 </template>

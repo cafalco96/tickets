@@ -2,6 +2,7 @@
 import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useSettings } from '@/composables/useSettings.js'
 import { useTicket } from '@/composables/useTicket.js'
+import { buildQrValue } from '@/composables/useTicketQr.js'
 import QrCode from './QrCode.vue'
 
 const props = defineProps({
@@ -15,6 +16,10 @@ const emit = defineEmits(['overflow'])
 const { settings } = useSettings()
 const { ticket: liveTicket } = useTicket()
 const ticket = computed(() => props.ticketData || liveTicket)
+
+// Cada ticket codifica en el QR sus propios datos para reconstruirse en el
+// visor de esta misma aplicación al escanearlo.
+const qrValue = computed(() => buildQrValue(ticket.value))
 
 // Separador tipo impresora térmica. Se recorta con overflow:hidden según el ancho útil.
 const SEPARATOR = '='.repeat(64)
@@ -188,7 +193,7 @@ watch([ticket, settings], checkOverflow, { deep: true })
         </p>
         <p class="ticket-original">- Original -</p>
         <div class="ticket-qr">
-          <QrCode :value="settings.urlQr" :size-mm="Number(settings.qrSizeMm)" />
+          <QrCode :value="qrValue" :size-mm="Number(settings.qrSizeMm)" />
         </div>
       </div>
     </div>
