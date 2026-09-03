@@ -66,6 +66,13 @@
     -webkit-print-color-adjust: exact;
   }
 
+  /* Modo visor: un solo ticket centrado en la hoja, sin rejilla A4. */
+  .viewer-ticket {
+    width: 210mm;
+    display: flex;
+    justify-content: center;
+  }
+
   /* Sin textura térmica en la impresión: el ticket sale en blanco limpio,
      sin las líneas/cuadrícula de la textura. */
   .ticket::after {

@@ -19,8 +19,8 @@ async function generate() {
     const text = String(props.value ?? '')
     if (!text.trim()) throw new Error('La URL del QR está vacía.')
     dataUrl.value = await QRCode.toDataURL(text, {
-      errorCorrectionLevel: 'M',
-      margin: 1,
+      errorCorrectionLevel: 'L',
+      margin: 2,
       width: 512,
       color: { dark: '#000000', light: '#ffffff' },
     })

@@ -316,14 +316,15 @@
   text-align: center;
 }
 
-/* El QR queda por encima de la textura, nítido y con fondo blanco (zona silenciosa). */
+/* El QR queda por encima de la textura, nítido y con fondo blanco (zona silenciosa).
+   Posicionado totalmente dentro del ticket para no recortar su zona de silencio. */
 .ticket-qr {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: -3mm;
+  right: 3mm;
   z-index: 3;
   background: #fff;
-  transform: translateY(3mm);
+  padding: 1mm;
 }
 
 .qr-code {
@@ -409,4 +410,28 @@
   mask-size: 3px 3px;
   -webkit-mask-repeat: repeat;
   mask-repeat: repeat;
+}
+
+/* Visor (al escanear el QR): el ticket se centra y no lleva la textura térmica,
+   igual que la impresión. La textura solo queda en el preview del editor. */
+.viewer {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.viewer .ticket::after {
+  display: none !important;
+}
+
+/* En móvil, dentro del visor (resultado del escaneo), se elimina el fondo gris
+   del body/app para que solo se vea el ticket. */
+@media (max-width: 767px) {
+  body.viewer-mode,
+  body.viewer-mode .app-shell {
+    background: #fff;
+  }
 }

@@ -16,8 +16,7 @@ export const DEFAULT_SETTINGS = {
   responsable: 'ESTEBAN TEJADA',
   cargo: 'Recaudador',
 
-  urlQr: 'https://ticketvalidador.emgirs.gob.ec/ticket/',
-  qrSizeMm: 15,
+  qrSizeMm: 17,
 
   watermarkUrl: '',
   watermarkOpacity: 0.16,
