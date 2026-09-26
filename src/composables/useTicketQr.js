@@ -7,6 +7,17 @@ import { DEFAULT_TICKET_DATA } from '@/data/defaults.js'
 // La apariencia (tipografía, tamaños, marca de agua) se toma de la configuración
 // del visor, que la organización define una sola vez.
 const KEY_MAP = {
+  // Datos fijos del ticket (deben viajar en el QR para reconstruirlo exactamente)
+  empresa1: 'e1',
+  empresa2: 'e2',
+  contribuyenteEspecial: 'ce',
+  matriz1: 'm1',
+  matriz2: 'm2',
+  encabezado: 'h',
+  subtitulo: 'st',
+  responsable: 're',
+  cargo: 'ca',
+  // Datos variables del ticket
   caseta: 'c',
   rucEmisor: 'r',
   numeroTicket: 'n',
