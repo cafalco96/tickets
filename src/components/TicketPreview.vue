@@ -3,6 +3,7 @@ import { computed, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { useSettings } from '@/composables/useSettings.js'
 import { useTicket } from '@/composables/useTicket.js'
 import { buildQrValue } from '@/composables/useTicketQr.js'
+import { TICKET_FIXED_FIELDS } from '@/data/defaults.js'
 import QrCode from './QrCode.vue'
 
 const props = defineProps({
@@ -18,6 +19,17 @@ const emit = defineEmits(['overflow'])
 const { settings } = useSettings()
 const { ticket: liveTicket } = useTicket()
 const ticket = computed(() => props.ticketData || liveTicket)
+
+// Datos fijos del ticket. Si el ticket trae su propia copia (p.ej. escaneado o
+// ya agregado al PDF), se usan esos valores; de lo contrario se usan los de la
+// configuración actual del editor.
+const fixedData = computed(() => {
+  const data = {}
+  for (const key of TICKET_FIXED_FIELDS) {
+    data[key] = ticket.value[key] || settings[key]
+  }
+  return data
+})
 
 // Cada ticket codifica en el QR sus propios datos para reconstruirse en el
 // visor de esta misma aplicación al escanearlo.
@@ -119,15 +131,15 @@ watch([ticket, settings], checkOverflow, { deep: true })
   <article ref="ticketEl" class="ticket" aria-label="Ticket">
     <div ref="bodyEl" class="ticket-body">
       <header class="ticket-header">
-        <p class="ticket-empresa">{{ settings.empresa1 }}</p>
-        <p class="ticket-empresa ticket-empresa-line-2">{{ settings.empresa2 }}</p>
+        <p class="ticket-empresa">{{ fixedData.empresa1 }}</p>
+        <p class="ticket-empresa ticket-empresa-line-2">{{ fixedData.empresa2 }}</p>
         <p class="ticket-header-line">
-          Contribuyente Especial Resolución: {{ settings.contribuyenteEspecial }}
+          Contribuyente Especial Resolución: {{ fixedData.contribuyenteEspecial }}
         </p>
-        <p class="ticket-header-line">Matriz: {{ settings.matriz1 }}</p>
-        <p class="ticket-header-line ticket-header-line-2">{{ settings.matriz2 }}</p>
-        <h2 class="ticket-encabezado">{{ settings.encabezado }}</h2>
-        <p class="ticket-subtitulo">{{ settings.subtitulo }}</p>
+        <p class="ticket-header-line">Matriz: {{ fixedData.matriz1 }}</p>
+        <p class="ticket-header-line ticket-header-line-2">{{ fixedData.matriz2 }}</p>
+        <h2 class="ticket-encabezado">{{ fixedData.encabezado }}</h2>
+        <p class="ticket-subtitulo">{{ fixedData.subtitulo }}</p>
       </header>
 
       <dl class="ticket-meta">
@@ -187,11 +199,11 @@ watch([ticket, settings], checkOverflow, { deep: true })
       <div class="ticket-bottom">
         <p class="ticket-responsable">
           <span class="ticket-meta-label">Responsable</span>
-          <span class="ticket-meta-value">: {{ settings.responsable }}</span>
+          <span class="ticket-meta-value">: {{ fixedData.responsable }}</span>
         </p>
         <p class="ticket-responsable">
           <span class="ticket-meta-label">Cargo</span>
-          <span class="ticket-meta-value">: {{ settings.cargo }}</span>
+          <span class="ticket-meta-value">: {{ fixedData.cargo }}</span>
         </p>
         <p class="ticket-original">- Original -</p>
         <div class="ticket-qr">

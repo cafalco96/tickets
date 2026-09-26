@@ -1,5 +1,5 @@
 import { reactive, ref, watch } from 'vue'
-import { DEFAULT_TICKET_DATA } from '@/data/defaults.js'
+import { DEFAULT_TICKET_DATA, TICKET_FIXED_FIELDS } from '@/data/defaults.js'
 import { useSettings } from './useSettings.js'
 import { useTicketSequence } from './useTicketSequence.js'
 
@@ -8,6 +8,20 @@ const sequence = useTicketSequence()
 
 // Datos variables del ticket actual. NUNCA se persisten.
 const ticket = reactive({ ...DEFAULT_TICKET_DATA })
+
+// Copia los datos fijos de la configuración actual al ticket en edición.
+// Esto garantiza que el QR transporte exactamente lo que se ve en pantalla.
+function syncFixedFieldsFromSettings() {
+  for (const key of TICKET_FIXED_FIELDS) {
+    ticket[key] = settings[key]
+  }
+}
+
+// Al cambiar la configuración, el ticket en edición refleja los nuevos datos fijos.
+watch(settings, syncFixedFieldsFromSettings, { deep: true })
+
+// Asegura que el ticket inicial tenga los datos fijos activos (p.ej. cargados de localStorage).
+syncFixedFieldsFromSettings()
 const pdfTickets = ref([])
 const pdfFeedback = ref('')
 const pdfFeedbackType = ref('info')
@@ -69,6 +83,7 @@ export function useTicket() {
     const copiasAnteriores = ticket.copias
     const numeroAnterior = String(ticket.numeroTicket || '').trim()
     Object.assign(ticket, structuredClone(DEFAULT_TICKET_DATA))
+    syncFixedFieldsFromSettings()
     ticket.copias = Math.max(1, Math.floor(Number(copiasAnteriores) || 1))
     ticket.fechaEmision = formatLocalDateTime()
     ticket.costo = round2((Number(ticket.cantidad) || 0) * (Number(ticket.precioUnitario) || 0))

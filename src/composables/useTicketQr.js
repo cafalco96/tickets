@@ -1,12 +1,23 @@
 import { DEFAULT_TICKET_DATA } from '@/data/defaults.js'
 
-// Claves cortas (1-2 caracteres) en un formato compacto y URL-safe (sin %, &, =, #)
-// para minimizar el payload del QR. Para un ticket pequeño, la compresión LZ
-// empeora el tamaño (añade cabecera), así que conviene acortar claves.
-// Formato: "c*20~r*1768...~n*014..." (campo separado por ~, clave*valor).
-// La apariencia (tipografía, tamaños, marca de agua) se toma de la configuración
-// del visor, que la organización define una sola vez.
+// Claves cortas (1-2 caracteres) en un formato compacto para minimizar el
+// payload del QR. Para un ticket pequeño, la compresión LZ empeora el tamaño
+// (añade cabecera), así que conviene acortar claves.
+// Formato interno: "c*20~r*1768...~n*014..." (campo separado por ~, clave*valor).
+// El payload completo se URL-encodea al montar la URL del QR para preservar
+// tildes, eñes y caracteres especiales sin depender de la codificación del lector.
 const KEY_MAP = {
+  // Datos fijos del ticket (deben viajar en el QR para reconstruirlo exactamente)
+  empresa1: 'e1',
+  empresa2: 'e2',
+  contribuyenteEspecial: 'ce',
+  matriz1: 'm1',
+  matriz2: 'm2',
+  encabezado: 'h',
+  subtitulo: 'st',
+  responsable: 're',
+  cargo: 'ca',
+  // Datos variables del ticket
   caseta: 'c',
   rucEmisor: 'r',
   numeroTicket: 'n',
@@ -63,7 +74,9 @@ export function buildQrValue(ticketData) {
   const payload = encodeTicket(ticketData)
   const base = resolveQrBase()
   const sep = base.includes('?') ? '&' : '?'
-  return `${base}${sep}ticket=${payload}`
+  // URL-encodeamos el payload para que tildes, eñes y caracteres como & = # ?
+  // no se corrompan al escanear el QR con diferentes lectores o navegadores.
+  return `${base}${sep}ticket=${encodeURIComponent(payload)}`
 }
 
 export function readTicketParam() {

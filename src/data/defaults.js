@@ -51,8 +51,34 @@ export const DEFAULT_SETTINGS = {
   incrementarAl: 'nuevo_ticket',
 }
 
+// Campos de configuración que deben viajar con cada ticket (codificados en el QR)
+// para que, al escanearlo, se reconstruyan exactamente los datos fijos impresos.
+export const TICKET_FIXED_FIELDS = [
+  'empresa1',
+  'empresa2',
+  'contribuyenteEspecial',
+  'matriz1',
+  'matriz2',
+  'encabezado',
+  'subtitulo',
+  'responsable',
+  'cargo',
+]
+
 // Datos iniciales de un ticket nuevo. Solo viven en memoria.
 export const DEFAULT_TICKET_DATA = {
+  // Datos fijos del ticket (se copian de settings al crear un ticket y viajan en el QR)
+  empresa1: DEFAULT_SETTINGS.empresa1,
+  empresa2: DEFAULT_SETTINGS.empresa2,
+  contribuyenteEspecial: DEFAULT_SETTINGS.contribuyenteEspecial,
+  matriz1: DEFAULT_SETTINGS.matriz1,
+  matriz2: DEFAULT_SETTINGS.matriz2,
+  encabezado: DEFAULT_SETTINGS.encabezado,
+  subtitulo: DEFAULT_SETTINGS.subtitulo,
+  responsable: DEFAULT_SETTINGS.responsable,
+  cargo: DEFAULT_SETTINGS.cargo,
+
+  // Datos variables
   caseta: '20',
   rucEmisor: '1768158410001',
   numeroTicket: '',
